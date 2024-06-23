@@ -5,7 +5,8 @@ import { Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-function getLocation() {
+
+function getLocation(): Promise<{ latitude: number; longitude: number }> {
   return new Promise((resolve, rej) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -20,39 +21,52 @@ function getLocation() {
     }
   })
 }
+async function initMap(isInit: boolean) {
+  if (isInit) return
+  isInit = true
+  const location = await getLocation()
+  let lMap = L.map('map').setView(
+    location
+      ? [Number(location.latitude), Number(location.longitude)]
+      : [51.505, -0.09],
+    13
+  )
+
+  const baseEMAP = L.tileLayer(
+    'https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',
+    {
+      maxNativeZoom: 20,
+      maxZoom: 20,
+    }
+  ).addTo(lMap)
+  // Create the custom control (button)
+  const LocateControl = L.Control.extend({
+    onAdd: function (map) {
+      const button = L.DomUtil.create('button', 'locate-button')
+      button.innerHTML = 'My Location'
+      button.onclick = function () {
+        map.locate({ setView: true, maxZoom: 16 })
+      }
+      return button
+    },
+  })
+  // Add the locate control to the map
+  lMap.addControl(new LocateControl({ position: 'bottomright' }))
+
+  // Handle location found event
+  lMap.on('locationfound', function (e) {})
+  return lMap
+}
 export default ({ locations = [] }: { locations: Response }) => {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
 
-  async function initMap() {
-    if (isInit) return
-    isInit = true
-    const location = await getLocation()
-    let result = L.map('map').setView(
-      location
-        ? [location.latitude as number, location.longitude]
-        : [(51.505, -0.09)],
-      13
-    )
-
-    const baseEMAP = L.tileLayer(
-      'https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',
-      {
-        maxNativeZoom: 20,
-        maxZoom: 20,
-      }
-    ).addTo(result)
-    setMap(result)
-  }
   useEffect(() => {
-    initMap()
+    const map = initMap(isInit).then(setMap)
   }, [])
   useEffect(() => {
-    console.log('update map', map)
-
     if (!map) return
     const markers = L.markerClusterGroup()
-    console.log('markers', markers)
     const customIcon = L.icon({
       iconUrl: '/point.png',
       iconSize: [42, 42],
