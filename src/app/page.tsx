@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import Map from './components/map'
 import SearchBar from './components/searchBar'
 import searchShoAction from './service/api/searchShowAction'
+import InfoCard from './components/infoCard'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
 
@@ -12,9 +13,14 @@ const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
 const Page = () => {
-  let map: any
   const [data, setData] = useState([])
+  const [currentData, setCurrentData] = useState(null)
+  const [infoCardVisible, setInfoCardVisible] = useState(false)
 
+  useEffect(() => {
+    if (!currentData) return
+    setInfoCardVisible(true)
+  }, [currentData])
   useEffect(() => {
     searchShoAction()
       .then((data) => setData(data as any))
@@ -27,7 +33,20 @@ const Page = () => {
       </Head>
       <div className="container flex flex-col h-full w-full max-w-[390px]">
         <SearchBar></SearchBar>
-        <MapComponent locations={data}></MapComponent>
+        <MapComponent
+          setCurrentData={(data) => {
+            console.log(data)
+            setCurrentData(data)
+          }}
+          className="z-10"
+          locations={data}
+        ></MapComponent>
+        <InfoCard
+          isVisible={infoCardVisible}
+          onClose={() => setInfoCardVisible(false)}
+          data={currentData}
+          className="fix bottom-0 z-50 h-[30vh]"
+        ></InfoCard>
       </div>
     </main>
   )

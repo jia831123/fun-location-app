@@ -5,6 +5,9 @@ import { Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import 'leaflet.locatecontrol' // Import plugin
+import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css' // Import styles
+import clsx from 'clsx' // 用於條件合併 class 名稱
 
 function getLocation(): Promise<{ latitude: number; longitude: number }> {
   return new Promise((resolve, rej) => {
@@ -39,25 +42,23 @@ async function initMap(isInit: boolean) {
       maxZoom: 20,
     }
   ).addTo(lMap)
-  // Create the custom control (button)
-  const LocateControl = L.Control.extend({
-    onAdd: function (map: any) {
-      const button = L.DomUtil.create('button', 'locate-button')
-      button.innerHTML = 'My Location'
-      button.onclick = function () {
-        map.locate({ setView: true, maxZoom: 16 })
-      }
-      return button
-    },
-  })
+
   // Add the locate control to the map
-  lMap.addControl(new LocateControl({ position: 'bottomright' }))
+  L.control.locate().addTo(lMap)
 
   // Handle location found event
   lMap.on('locationfound', function (e) {})
   return lMap
 }
-const Map = ({ locations = [] }: { locations: Response }) => {
+const Map = ({
+  locations = [],
+  className = '',
+  setCurrentData = (data) => {},
+}: {
+  locations: Response
+  className?: string
+  setCurrentData: (data: any) => void
+}) => {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
 
@@ -87,22 +88,22 @@ const Map = ({ locations = [] }: { locations: Response }) => {
           {
             icon: customIcon,
           }
-        ).bindPopup(
-          `
-            title:  ${item.title}<br>,
-            time: ${item.showInfo[0].time}<br>
-            location: ${item.showInfo[0].location}<br>
-            locationName: ${item.showInfo[0].locationName}<br>
-            onSales: ${item.showInfo[0].onSales}<br>
-            price: ${item.showInfo[0].price}<br>
-            latitude?: ${item.showInfo[0].latitude}<br>
-            longitude?: ${item.showInfo[0].longitude}<br>
-            endTime: ${item.showInfo[0].endTime}`
-        )
+        ).addEventListener('click', () => {
+          setCurrentData(item)
+          map.setView(
+            [
+              Number(item.showInfo[0].latitude) as number,
+              Number(item.showInfo[0].longitude) as number,
+            ],
+            18
+          )
+        })
       })
       .forEach((item) => markers.addLayer(item))
     map.addLayer(markers)
   }, [locations])
-  return <div id="map" className="h-full w-[100%] border-1"></div>
+  return (
+    <div id="map" className={clsx('h-full w-[100%] border-1', className)}></div>
+  )
 }
 export default Map
