@@ -41,7 +41,7 @@ async function initMap(isInit: boolean) {
   ).addTo(lMap)
   // Create the custom control (button)
   const LocateControl = L.Control.extend({
-    onAdd: function (map) {
+    onAdd: function (map: any) {
       const button = L.DomUtil.create('button', 'locate-button')
       button.innerHTML = 'My Location'
       button.onclick = function () {
@@ -57,12 +57,12 @@ async function initMap(isInit: boolean) {
   lMap.on('locationfound', function (e) {})
   return lMap
 }
-export default ({ locations = [] }: { locations: Response }) => {
+const Map = ({ locations = [] }: { locations: Response }) => {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
 
   useEffect(() => {
-    const map = initMap(isInit).then(setMap)
+    initMap(isInit).then((map) => setMap(map as any))
   }, [])
   useEffect(() => {
     if (!map) return
@@ -105,3 +105,4 @@ export default ({ locations = [] }: { locations: Response }) => {
   }, [locations])
   return <div id="map" className="h-full w-[100%] border-1"></div>
 }
+export default Map
