@@ -50,7 +50,7 @@ async function initMap(isInit: boolean) {
   lMap.on('locationfound', function (e) {})
   return lMap
 }
-const Map = ({
+export default function Map({
   locations = [],
   className = '',
   setCurrentData = (data) => {},
@@ -58,7 +58,7 @@ const Map = ({
   locations: Response
   className?: string
   setCurrentData: (data: any) => void
-}) => {
+}) {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
 
@@ -106,4 +106,3 @@ const Map = ({
     <div id="map" className={clsx('h-full w-[100%] border-1', className)}></div>
   )
 }
-export default Map
