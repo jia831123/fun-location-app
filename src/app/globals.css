@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  overflow: hidden;
+}
 :root {
   --foreground-rgb:white ;
   --background-start-rgb: 214, 219, 220;

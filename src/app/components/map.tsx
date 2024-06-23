@@ -90,13 +90,10 @@ export default function Map({
           }
         ).addEventListener('click', () => {
           setCurrentData(item)
-          map.setView(
-            [
-              Number(item.showInfo[0].latitude) as number,
-              Number(item.showInfo[0].longitude) as number,
-            ],
-            18
-          )
+          map.setView([
+            Number(item.showInfo[0].latitude) as number,
+            Number(item.showInfo[0].longitude) as number,
+          ])
         })
       })
       .forEach((item) => markers.addLayer(item))

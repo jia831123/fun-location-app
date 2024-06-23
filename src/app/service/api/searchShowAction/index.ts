@@ -1,6 +1,6 @@
-export default async (
+const searchShowAction = async function (
   category: CategoryEnum = CategoryEnum.EXHIBITION
-): Promise<Response> => {
+): Promise<Response> {
   const host =
     'https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ'
   return fetch(`${host}&category=${category}`)
@@ -64,3 +64,4 @@ export interface ShowInfo {
   endTime: string
 }
 export type Response = Data[]
+export default searchShowAction

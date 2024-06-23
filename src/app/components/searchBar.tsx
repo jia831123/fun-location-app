@@ -51,12 +51,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-export default function SearchAppBar() {
+export default function SearchAppBar({ openDraw }: { openDraw: Function }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
+            onClick={() => {
+              openDraw()
+            }}
             size="large"
             edge="start"
             color="inherit"
@@ -71,7 +74,7 @@ export default function SearchAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Fun Location App
           </Typography>
           <Search>
             <SearchIconWrapper>
