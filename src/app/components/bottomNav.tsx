@@ -19,12 +19,17 @@ export default function BottomNav({
         setActive(newValue)
       }}
     >
-      <BottomNavigationAction label="Map" icon={<MapIcon />} />
+      <BottomNavigationAction value={0} label="Map" icon={<MapIcon />} />
       <BottomNavigationAction
+        value={1}
         label="Favorites"
         icon={<FormatListNumberedIcon />}
       />
-      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+      <BottomNavigationAction
+        value={2}
+        label="Nearby"
+        icon={<LocationOnIcon />}
+      />
     </BottomNavigation>
   )
 }

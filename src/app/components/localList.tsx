@@ -4,9 +4,17 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-export default function LocalList({ locations }: { locations: Response }) {
+import clsx from 'clsx' // 用於條件合併 class 名稱
+export default function LocalList({
+  locations,
+  className = '',
+}: {
+  locations: Response
+  className: string
+}) {
   return (
     <Box
+      className={clsx('h-full w-[100%] border-1', className)}
       sx={{
         width: '100%',
         maxHeight: '100%',

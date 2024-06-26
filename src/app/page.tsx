@@ -29,6 +29,7 @@ const Page = () => {
   const [currentData, setCurrentData] = useState(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  console.log('page')
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -93,11 +94,11 @@ const Page = () => {
               console.log(data)
               setCurrentData(data)
             }}
-            className="z-10"
+            className={`z-10`}
             locations={data}
           ></MapComponent>
         ) : (
-          <LocalList locations={data}></LocalList>
+          <LocalList className={`z-20 `} locations={data}></LocalList>
         )}
 
         <BottomNav active={activeIndex} setActive={setActiveIndex}></BottomNav>
@@ -106,7 +107,7 @@ const Page = () => {
           isVisible={infoCardVisible}
           onClose={() => setInfoCardVisible(false)}
           data={currentData}
-          className="fix bottom-0 z-50 h-[30vh]"
+          className="fix bottom-0 z-50 h-[30vh] max-w-[430px]"
         ></InfoCard>
         <Drawer open={open} onClose={toggleDrawer(false)}>
           {DrawerList}

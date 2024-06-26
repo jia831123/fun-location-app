@@ -48,7 +48,7 @@ const InfoCard = forwardRef(
         className={clsx(
           `fixed bottom-0 left-0 w-full max-w-full bg-white shadow-md overflow-auto transition-transform duration-500 ${
             isVisible ? 'transform translate-y-0' : 'transform translate-y-full'
-          } overflow-auto`,
+          } overflow-auto max-w-[430px]`,
           className
         )}
         sx={{ minWidth: 275 }}
@@ -58,11 +58,11 @@ const InfoCard = forwardRef(
             {data?.title}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <div
+            <span
               dangerouslySetInnerHTML={{
                 __html: String(data?.descriptionFilterHtml || ''),
               }}
-            ></div>
+            ></span>
           </Typography>
           <Typography variant="body2">
             起始日

@@ -1,6 +1,11 @@
 import * as L from 'leaflet'
 import 'leaflet.markercluster'
-import { useEffect, useState } from 'react'
+import {
+  MouseEventHandler,
+  TouchEventHandler,
+  useEffect,
+  useState,
+} from 'react'
 import { Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -34,8 +39,7 @@ async function initMap(isInit: boolean) {
       : [51.505, -0.09],
     13
   )
-
-  const baseEMAP = L.tileLayer(
+  L.tileLayer(
     'https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',
     {
       maxNativeZoom: 20,
@@ -61,9 +65,16 @@ export default function Map({
 }) {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
-
+  console.log('map component')
   useEffect(() => {
+    console.log('init map')
     initMap(isInit).then((map) => setMap(map as any))
+    return () => {
+      if (map && map.remove) {
+        map.off()
+        map.remove()
+      }
+    }
   }, [])
   useEffect(() => {
     if (!map) return
