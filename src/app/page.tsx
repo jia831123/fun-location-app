@@ -51,7 +51,9 @@ const Page = () => {
   const [open, setOpen] = useState(false)
   function safariHacks() {
     let windowsVH = window.innerHeight / 100
-    const mainContainer = document.querySelector('.main-container')
+    const mainContainer = document.querySelector(
+      '.main-container'
+    ) as HTMLElement
     if (mainContainer === null) return
     mainContainer.style.setProperty('--vh', windowsVH + 'px')
     window.addEventListener('resize', function () {
