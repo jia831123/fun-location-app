@@ -55,7 +55,7 @@ const Page = () => {
           document.querySelector('.main-container').style.setProperty('--vh', windowsVH + 'px')
       });
   }
-safariHacks()
+  safariHacks()
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
