@@ -48,7 +48,14 @@ const Page = () => {
     }
   }
   const [open, setOpen] = useState(false)
-
+  function safariHacks() {
+      let windowsVH = window.innerHeight / 100;
+      document.querySelector('.main-container').style.setProperty('--vh', windowsVH + 'px')
+      window.addEventListener('resize', function() {
+          document.querySelector('.main-container').style.setProperty('--vh', windowsVH + 'px')
+      });
+  }
+safariHacks()
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
