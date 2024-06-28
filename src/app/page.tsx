@@ -82,7 +82,7 @@ const Page = () => {
     </Box>
   )
   return (
-    <main className="flex h-[100vh] flex-col items-center justify-center bg-black">
+    <main className="flex main-container flex-col items-center justify-center bg-black">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
