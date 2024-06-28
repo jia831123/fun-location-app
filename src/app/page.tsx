@@ -36,6 +36,7 @@ const Page = () => {
     handleScrollToTop()
   }, [currentData])
   useEffect(() => {
+    safariHacks()
     searchShoAction()
       .then((data) => setData(data as any))
       .catch((error) => console.error('Error fetching data:', error))
@@ -49,13 +50,15 @@ const Page = () => {
   }
   const [open, setOpen] = useState(false)
   function safariHacks() {
-      let windowsVH = window.innerHeight / 100;
-      document.querySelector('.main-container').style.setProperty('--vh', windowsVH + 'px')
-      window.addEventListener('resize', function() {
-          document.querySelector('.main-container').style.setProperty('--vh', windowsVH + 'px')
-      });
+    let windowsVH = window.innerHeight / 100
+    const mainContainer = document.querySelector('.main-container')
+    if (mainContainer === null) return
+    mainContainer.style.setProperty('--vh', windowsVH + 'px')
+    window.addEventListener('resize', function () {
+      mainContainer.style.setProperty('--vh', windowsVH + 'px')
+    })
   }
-  safariHacks()
+
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
@@ -96,26 +99,29 @@ const Page = () => {
       <div className="container flex flex-col h-full w-full max-w-[430px]">
         <SearchBar openDraw={toggleDrawer(true)}></SearchBar>
         {activeIndex === 0 ? (
-          <MapComponent
-            setCurrentData={(data) => {
-              console.log(data)
-              setCurrentData(data)
-            }}
-            className={`z-10`}
-            locations={data}
-          ></MapComponent>
+          <div className="h-full">
+            <MapComponent
+              setCurrentData={(data) => {
+                console.log(data)
+                setCurrentData(data)
+              }}
+              className={`z-10`}
+              locations={data}
+            ></MapComponent>
+            <InfoCard
+              ref={childRef}
+              isVisible={infoCardVisible}
+              onClose={() => setInfoCardVisible(false)}
+              data={currentData}
+              className="absolute  bottom-0 z-50 h-[30vh] max-w-[430px]"
+            ></InfoCard>
+          </div>
         ) : (
           <LocalList className={`z-20 `} locations={data}></LocalList>
         )}
 
         <BottomNav active={activeIndex} setActive={setActiveIndex}></BottomNav>
-        <InfoCard
-          ref={childRef}
-          isVisible={infoCardVisible}
-          onClose={() => setInfoCardVisible(false)}
-          data={currentData}
-          className="fix bottom-0 z-50 h-[30vh] max-w-[430px]"
-        ></InfoCard>
+
         <Drawer open={open} onClose={toggleDrawer(false)}>
           {DrawerList}
         </Drawer>
