@@ -95,9 +95,6 @@ const Page = () => {
   )
   return (
     <main className="flex main-container flex-col items-center justify-center bg-black">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
       <div className="container flex flex-col h-full w-full max-w-[430px]">
         <SearchBar openDraw={toggleDrawer(true)}></SearchBar>
         {activeIndex === 0 ? (
