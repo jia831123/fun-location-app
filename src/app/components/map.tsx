@@ -14,6 +14,42 @@ import 'leaflet.locatecontrol' // Import plugin
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css' // Import styles
 import clsx from 'clsx' // 用於條件合併 class 名稱
 
+function getCustomIcon() {
+  return L.icon({
+    iconUrl: '/point.png',
+    iconSize: [42, 42],
+  })
+}
+function getMarkers(locations: Response, setCurrentData: Function, map: any) {
+  const markers = L.markerClusterGroup()
+  const customIcon = getCustomIcon()
+  locations
+    .filter(
+      (item) =>
+        item.showInfo[0] &&
+        'latitude' in item.showInfo[0] &&
+        'longitude' in item.showInfo[0]
+    )
+    .map((item) => {
+      return L.marker(
+        [
+          Number(item.showInfo[0].latitude) as number,
+          Number(item.showInfo[0].longitude) as number,
+        ],
+        {
+          icon: customIcon,
+        }
+      ).addEventListener('click', () => {
+        setCurrentData(item)
+        map.setView([
+          Number(item.showInfo[0].latitude) as number,
+          Number(item.showInfo[0].longitude) as number,
+        ])
+      })
+    })
+    .forEach((item) => markers.addLayer(item))
+  return markers
+}
 function getLocation(): Promise<{ latitude: number; longitude: number }> {
   return new Promise((resolve, rej) => {
     if (navigator.geolocation) {
@@ -29,6 +65,7 @@ function getLocation(): Promise<{ latitude: number; longitude: number }> {
     }
   })
 }
+
 async function initMap(center?: [latitude: number, longitude: number]) {
   const location = await getLocation()
   let lMap = L.map('map').setView(
@@ -63,7 +100,17 @@ export default function Map({
   const [map, setMap] = useState<L.Map | null>(null)
   useEffect(() => {
     console.log('init map')
-    if (isInit === false) initMap().then((map) => setMap(map as any))
+    let lMap
+    if (isInit === false) {
+      lMap = initMap().then((map) => {
+        setMap(map as any)
+        if (locations.length > 0) {
+          const markers = getMarkers(locations, setCurrentData, map)
+          map.addLayer(markers)
+        }
+      })
+    }
+
     return () => {
       if (map && map.remove) {
         map.off()
@@ -73,36 +120,7 @@ export default function Map({
   }, [])
   useEffect(() => {
     if (!map) return
-    const markers = L.markerClusterGroup()
-    const customIcon = L.icon({
-      iconUrl: '/point.png',
-      iconSize: [42, 42],
-    })
-    locations
-      .filter(
-        (item) =>
-          item.showInfo[0] &&
-          'latitude' in item.showInfo[0] &&
-          'longitude' in item.showInfo[0]
-      )
-      .map((item) => {
-        return L.marker(
-          [
-            Number(item.showInfo[0].latitude) as number,
-            Number(item.showInfo[0].longitude) as number,
-          ],
-          {
-            icon: customIcon,
-          }
-        ).addEventListener('click', () => {
-          setCurrentData(item)
-          map.setView([
-            Number(item.showInfo[0].latitude) as number,
-            Number(item.showInfo[0].longitude) as number,
-          ])
-        })
-      })
-      .forEach((item) => markers.addLayer(item))
+    const markers = getMarkers(locations, setCurrentData, map)
     map.addLayer(markers)
   }, [locations])
   return (
