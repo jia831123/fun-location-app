@@ -51,7 +51,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-export default function SearchAppBar({ openDraw }: { openDraw: Function }) {
+export default function SearchAppBar({
+  openDraw,
+  searchWord,
+  setSearchWord,
+  searchClickHandle,
+}: {
+  openDraw: Function
+  searchWord: string
+  setSearchWord: Function
+  searchClickHandle: Function
+}) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar color={'primary'} position="static">
@@ -81,6 +91,9 @@ export default function SearchAppBar({ openDraw }: { openDraw: Function }) {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              value={searchWord}
+              onChange={(e) => setSearchWord(e.target.value)}
+              onClick={(e) => searchClickHandle(e)}
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />

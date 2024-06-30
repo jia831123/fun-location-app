@@ -1,6 +1,6 @@
 'use client'
 import Head from 'next/head'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import SearchBar from './components/searchBar'
 import searchShoAction from './service/api/searchShowAction'
@@ -24,11 +24,21 @@ import LocalList from './components/localList'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
+function safariHacks() {
+  let windowsVH = window.innerHeight / 100
+  const mainContainer = document.querySelector('.main-container') as HTMLElement
+  if (mainContainer === null) return
+  mainContainer.style.setProperty('--vh', windowsVH + 'px')
+  window.addEventListener('resize', function () {
+    mainContainer.style.setProperty('--vh', windowsVH + 'px')
+  })
+}
 const Page = () => {
-  const [data, setData] = useState([])
+  const [data, setData] = useState<any[]>([])
   const [currentData, setCurrentData] = useState(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [searchWord, setSearchWord] = useState<string>('')
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -42,23 +52,16 @@ const Page = () => {
   }, [])
   const childRef = useRef<any>(null)
 
+  const locationsForList = useMemo(() => {
+    if (!!searchWord === false) return data
+    return data.filter((each) => each['title'].includes(searchWord))
+  }, [data, searchWord]) // 依赖于 data 数组的变化
   const handleScrollToTop = () => {
     if (childRef.current) {
       childRef.current.scrollToTop()
     }
   }
   const [open, setOpen] = useState(false)
-  function safariHacks() {
-    let windowsVH = window.innerHeight / 100
-    const mainContainer = document.querySelector(
-      '.main-container'
-    ) as HTMLElement
-    if (mainContainer === null) return
-    mainContainer.style.setProperty('--vh', windowsVH + 'px')
-    window.addEventListener('resize', function () {
-      mainContainer.style.setProperty('--vh', windowsVH + 'px')
-    })
-  }
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
@@ -95,7 +98,12 @@ const Page = () => {
   return (
     <main className="flex main-container flex-col items-center justify-center bg-black">
       <div className="container flex flex-col h-full w-full max-w-[430px]">
-        <SearchBar openDraw={toggleDrawer(true)}></SearchBar>
+        <SearchBar
+          searchWord={searchWord}
+          setSearchWord={setSearchWord}
+          openDraw={toggleDrawer(true)}
+          searchClickHandle={() => setActiveIndex(1)}
+        ></SearchBar>
         {activeIndex === 0 ? (
           <div className="h-full">
             <MapComponent
@@ -114,7 +122,10 @@ const Page = () => {
             ></InfoCard>
           </div>
         ) : (
-          <LocalList className={`z-20 `} locations={data}></LocalList>
+          <LocalList
+            className={`z-20 `}
+            locations={locationsForList}
+          ></LocalList>
         )}
 
         <BottomNav active={activeIndex} setActive={setActiveIndex}></BottomNav>

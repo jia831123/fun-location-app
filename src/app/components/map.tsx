@@ -29,14 +29,10 @@ function getLocation(): Promise<{ latitude: number; longitude: number }> {
     }
   })
 }
-async function initMap(isInit: boolean) {
-  if (isInit) return
-  isInit = true
+async function initMap(center?: [latitude: number, longitude: number]) {
   const location = await getLocation()
   let lMap = L.map('map').setView(
-    location
-      ? [Number(location.latitude), Number(location.longitude)]
-      : [51.505, -0.09],
+    center ? [center[0], center[1]] : [location.latitude, location.longitude],
     13
   )
   L.tileLayer(
@@ -67,7 +63,7 @@ export default function Map({
   const [map, setMap] = useState<L.Map | null>(null)
   useEffect(() => {
     console.log('init map')
-    initMap(isInit).then((map) => setMap(map as any))
+    if (isInit === false) initMap().then((map) => setMap(map as any))
     return () => {
       if (map && map.remove) {
         map.off()
