@@ -1,5 +1,4 @@
 'use client'
-import Head from 'next/head'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import SearchBar from './components/searchBar'

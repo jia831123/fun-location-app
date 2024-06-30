@@ -1,5 +1,5 @@
 const searchShowAction = async function (
-  category: CategoryEnum = CategoryEnum.EXHIBITION
+  category: CategoryEnum = CategoryEnum.ALL
 ): Promise<Response> {
   const host =
     'https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ'
@@ -8,7 +8,7 @@ const searchShowAction = async function (
     .catch((error) => console.error('Error fetching data:', error))
 }
 
-enum CategoryEnum {
+export enum CategoryEnum {
   MUSIC = 1,
   DRAMATIC = 2,
   DANCE = 3,
@@ -23,6 +23,7 @@ enum CategoryEnum {
   OTHER = 15,
   CONCERT = 17,
   RESEARCH_CLASS = 19,
+  ALL = 'all',
 }
 
 interface Request {

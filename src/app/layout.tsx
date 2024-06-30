@@ -60,10 +60,6 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <link rel="icon" type="image/png" href="/images/favicon.png" />
         <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover"
-        />
-        <meta
           name="theme-color"
           content="#25c2bf"
           media="(prefers-color-scheme: dark)"
@@ -71,6 +67,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#f4f4f5" />
         <link rel="apple-touch-icon" href="/images/icon-maskable-512.png" />
         <link rel="manifest" href="/manifest.json" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no"
+        ></meta>
       </Head>
       <body className={inter.className}>{children}</body>
     </html>

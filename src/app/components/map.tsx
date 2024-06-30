@@ -1,23 +1,23 @@
 import * as L from 'leaflet'
 import 'leaflet.markercluster'
 import { useEffect, useState } from 'react'
-import { Response } from '../service/api/searchShowAction'
+import { CategoryEnum, Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.locatecontrol' // Import plugin
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css' // Import styles
 import clsx from 'clsx' // 用於條件合併 class 名稱
+import getIconsPath from '../utils/getIconsPath'
 
-function getCustomIcon() {
+function getCustomIcon(type: CategoryEnum) {
   return L.icon({
-    iconUrl: '/point.png',
+    iconUrl: getIconsPath(type),
     iconSize: [42, 42],
   })
 }
 function getMarkers(locations: Response, setCurrentData: Function, map: any) {
   const markers = L.markerClusterGroup()
-  const customIcon = getCustomIcon()
   locations
     .filter(
       (item) =>
@@ -32,7 +32,7 @@ function getMarkers(locations: Response, setCurrentData: Function, map: any) {
           Number(item.showInfo[0].longitude) as number,
         ],
         {
-          icon: customIcon,
+          icon: getCustomIcon(item.category as CategoryEnum),
         }
       ).addEventListener('click', () => {
         setCurrentData(item)
