@@ -32,16 +32,6 @@ const InfoCard = forwardRef(
         }
       },
     }))
-    // const s = `
-    //           title:  ${item.title}<br>,
-    //           time: ${item.showInfo[0].time}<br>
-    //           location: ${item.showInfo[0].location}<br>
-    //           locationName: ${item.showInfo[0].locationName}<br>
-    //           onSales: ${item.showInfo[0].onSales}<br>
-    //           price: ${item.showInfo[0].price}<br>
-    //           latitude?: ${item.showInfo[0].latitude}<br>
-    //           longitude?: ${item.showInfo[0].longitude}<br>
-    //           endTime: ${item.showInfo[0].endTime}`
 
     return (
       <Card
@@ -94,7 +84,12 @@ const InfoCard = forwardRef(
           </Typography>
         </CardContent>
         <CardActions>
-          <Button onClick={onClose} size="small">
+          <Button
+            className="w-full"
+            variant="contained"
+            onClick={onClose}
+            size="large"
+          >
             知道了
           </Button>
         </CardActions>
