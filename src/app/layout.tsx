@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 import type { Metadata, Viewport } from 'next'
 
 const APP_NAME = 'PWA App'
-const APP_DEFAULT_TITLE = 'My Awesome PWA App'
+const APP_DEFAULT_TITLE = 'Fun-location'
 const APP_TITLE_TEMPLATE = '%s - PWA App'
 const APP_DESCRIPTION = 'Best PWA app in the world!'
 
