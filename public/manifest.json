@@ -1,7 +1,7 @@
 {
-  "name": "Rice Bowl",
-  "short_name": "Rice Bowl",
-  "description": "Fluffless jasmine rice for those cold winter nights",
+  "name": "FunMap",
+  "short_name": "FunMap",
+  "description": "「趣味地圖 (FunMap)是一款專注於展示你周邊展覽和有趣地點的地圖應用。無論你是在尋找藝術展覽、科學博物館，還是城市中的隱藏寶藏，展覽地圖都能幫助你輕鬆找到最適合你的活動和地點。探索周邊的精彩世界，讓你的日常生活充滿驚喜！」",
   "icons": [
     {
       "src": "/images/icon-192.png",

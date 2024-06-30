@@ -5,8 +5,8 @@ import Head from 'next/head'
 const inter = Inter({ subsets: ['latin'] })
 import type { Metadata, Viewport } from 'next'
 
-const APP_NAME = 'PWA App'
-const APP_DEFAULT_TITLE = 'Fun-location'
+const APP_NAME = 'FunApp'
+const APP_DEFAULT_TITLE = 'FunApp'
 const APP_TITLE_TEMPLATE = '%s - PWA App'
 const APP_DESCRIPTION = 'Best PWA app in the world!'
 
@@ -65,7 +65,7 @@ export default function RootLayout({
         />
         <meta
           name="theme-color"
-          content="#18181b"
+          content="#25c2bf"
           media="(prefers-color-scheme: dark)"
         />
         <meta name="theme-color" content="#f4f4f5" />
