@@ -148,7 +148,6 @@ const Page = () => {
             setCurrentData={(data) => {
               setActiveIndex(0)
               setCurrentData(data)
-              console.log(data.showInfo[0])
             }}
           ></LocalList>
         )}
