@@ -65,7 +65,6 @@ export default function Map({
 }) {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
-  console.log('map component')
   useEffect(() => {
     console.log('init map')
     initMap(isInit).then((map) => setMap(map as any))

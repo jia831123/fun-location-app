@@ -54,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function SearchAppBar({ openDraw }: { openDraw: Function }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar color={'primary'} position="static">
         <Toolbar>
           <IconButton
             onClick={() => {

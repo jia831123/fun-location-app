@@ -29,7 +29,6 @@ const Page = () => {
   const [currentData, setCurrentData] = useState(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
-  console.log('page')
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -101,7 +100,6 @@ const Page = () => {
           <div className="h-full">
             <MapComponent
               setCurrentData={(data) => {
-                console.log(data)
                 setCurrentData(data)
               }}
               className={`z-10`}

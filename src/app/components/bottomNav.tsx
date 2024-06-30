@@ -12,24 +12,27 @@ export default function BottomNav({
   setActive: Function
 }) {
   return (
-    <BottomNavigation
-      showLabels
-      value={active}
-      onChange={(event, newValue) => {
-        setActive(newValue)
-      }}
-    >
-      <BottomNavigationAction value={0} label="Map" icon={<MapIcon />} />
-      <BottomNavigationAction
-        value={1}
-        label="Favorites"
-        icon={<FormatListNumberedIcon />}
-      />
-      <BottomNavigationAction
-        value={2}
-        label="Nearby"
-        icon={<LocationOnIcon />}
-      />
-    </BottomNavigation>
+    <div className="bg-white">
+      <BottomNavigation
+        className="mb-10"
+        showLabels
+        value={active}
+        onChange={(event, newValue) => {
+          setActive(newValue)
+        }}
+      >
+        <BottomNavigationAction value={0} label="Map" icon={<MapIcon />} />
+        <BottomNavigationAction
+          value={1}
+          label="Favorites"
+          icon={<FormatListNumberedIcon />}
+        />
+        <BottomNavigationAction
+          value={2}
+          label="Nearby"
+          icon={<LocationOnIcon />}
+        />
+      </BottomNavigation>
+    </div>
   )
 }
