@@ -1,11 +1,6 @@
 import * as L from 'leaflet'
 import 'leaflet.markercluster'
-import {
-  MouseEventHandler,
-  TouchEventHandler,
-  useEffect,
-  useState,
-} from 'react'
+import { useEffect, useState } from 'react'
 import { Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -91,10 +86,12 @@ export default function Map({
   locations = [],
   className = '',
   setCurrentData = (data) => {},
+  initCenter,
 }: {
   locations: Response
   className?: string
   setCurrentData: (data: any) => void
+  initCenter?: [number, number]
 }) {
   let isInit = false
   const [map, setMap] = useState<L.Map | null>(null)
@@ -102,7 +99,7 @@ export default function Map({
     console.log('init map')
     let lMap
     if (isInit === false) {
-      lMap = initMap().then((map) => {
+      lMap = initMap(initCenter).then((map) => {
         setMap(map as any)
         if (locations.length > 0) {
           const markers = getMarkers(locations, setCurrentData, map)

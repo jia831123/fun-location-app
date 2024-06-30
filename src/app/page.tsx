@@ -21,6 +21,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox'
 import MailIcon from '@mui/icons-material/Mail'
 import BottomNav from './components/bottomNav'
 import LocalList from './components/localList'
+import { Data as Location } from '@/app/service/api/searchShowAction'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
@@ -35,7 +36,7 @@ function safariHacks() {
 }
 const Page = () => {
   const [data, setData] = useState<any[]>([])
-  const [currentData, setCurrentData] = useState(null)
+  const [currentData, setCurrentData] = useState<Location | null>(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [searchWord, setSearchWord] = useState<string>('')
@@ -53,9 +54,21 @@ const Page = () => {
   const childRef = useRef<any>(null)
 
   const locationsForList = useMemo(() => {
-    if (!!searchWord === false) return data
-    return data.filter((each) => each['title'].includes(searchWord))
-  }, [data, searchWord]) // 依赖于 data 数组的变化
+    const hasValidCoordinates = (location: Location) =>
+      location.showInfo[0]?.latitude !== null &&
+      location.showInfo[0]?.longitude !== null
+
+    if (!searchWord) {
+      // 沒有搜索詞時過濾有效座標的 location
+      return data.filter(hasValidCoordinates)
+    }
+
+    // 有搜索詞時根據標題和座標過濾
+    return data.filter(
+      (location) =>
+        location.title.includes(searchWord) && hasValidCoordinates(location)
+    )
+  }, [data, searchWord])
   const handleScrollToTop = () => {
     if (childRef.current) {
       childRef.current.scrollToTop()
@@ -112,6 +125,14 @@ const Page = () => {
               }}
               className={`z-10`}
               locations={data}
+              initCenter={
+                currentData
+                  ? [
+                      Number(currentData.showInfo[0].latitude),
+                      Number(currentData.showInfo[0].longitude),
+                    ]
+                  : undefined
+              }
             ></MapComponent>
             <InfoCard
               ref={childRef}
@@ -125,6 +146,11 @@ const Page = () => {
           <LocalList
             className={`z-20 `}
             locations={locationsForList}
+            setCurrentData={(data) => {
+              setActiveIndex(0)
+              setCurrentData(data)
+              console.log(data.showInfo[0])
+            }}
           ></LocalList>
         )}
 
