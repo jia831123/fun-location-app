@@ -36,9 +36,9 @@ const InfoCard = forwardRef(
     return (
       <Card
         ref={divRef}
-        className={`fixed bottom-0 left-0 w-full max-w-full bg-white shadow-md overflow-auto transition-transform duration-500 ${
+        className={`fixed bottom-0 w-full max-w-[430px] bg-white shadow-md overflow-auto transition-transform duration-500 ${
           isVisible ? 'transform translate-y-0' : 'transform translate-y-full'
-        } overflow-auto max-w-[430xp] ${className}`}
+        } overflow-auto  ${className}`}
         sx={{ minWidth: 275 }}
       >
         <CardContent>

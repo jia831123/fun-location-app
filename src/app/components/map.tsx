@@ -1,6 +1,6 @@
 import * as L from 'leaflet'
 import 'leaflet.markercluster'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { CategoryEnum, Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -82,45 +82,52 @@ async function initMap(center?: [latitude: number, longitude: number]) {
   lMap.on('locationfound', function (e) {})
   return lMap
 }
-export default function Map({
-  locations = [],
-  className = '',
-  setCurrentData = (data) => {},
-  initCenter,
-}: {
-  locations: Response
-  className?: string
-  setCurrentData: (data: any) => void
-  initCenter?: [number, number]
-}) {
-  let isInit = false
-  const [map, setMap] = useState<L.Map | null>(null)
-  useEffect(() => {
-    console.log('init map')
-    let lMap
-    if (isInit === false) {
-      lMap = initMap(initCenter).then((map) => {
-        setMap(map as any)
-        if (locations.length > 0) {
-          const markers = getMarkers(locations, setCurrentData, map)
-          map.addLayer(markers)
-        }
-      })
-    }
-
-    return () => {
-      if (map && map.remove) {
-        map.off()
-        map.remove()
+const Map = memo(
+  ({
+    locations = [],
+    className = '',
+    setCurrentData = (data) => {},
+    initCenter,
+  }: {
+    locations: Response
+    className?: string
+    setCurrentData: (data: any) => void
+    initCenter?: [number, number]
+  }) => {
+    let isInit = false
+    const [map, setMap] = useState<L.Map | null>(null)
+    useEffect(() => {
+      console.log('init map')
+      let lMap
+      if (isInit === false) {
+        lMap = initMap(initCenter).then((map) => {
+          setMap(map as any)
+          if (locations.length > 0) {
+            const markers = getMarkers(locations, setCurrentData, map)
+            map.addLayer(markers)
+          }
+        })
       }
-    }
-  }, [])
-  useEffect(() => {
-    if (!map) return
-    const markers = getMarkers(locations, setCurrentData, map)
-    map.addLayer(markers)
-  }, [locations])
-  return (
-    <div id="map" className={clsx('h-full w-[100%] border-1', className)}></div>
-  )
-}
+
+      return () => {
+        if (map && map.remove) {
+          map.off()
+          map.remove()
+        }
+      }
+    }, [])
+    useEffect(() => {
+      if (!map) return
+      const markers = getMarkers(locations, setCurrentData, map)
+      map.addLayer(markers)
+    }, [locations])
+    return (
+      <div
+        id="map"
+        className={clsx('h-full w-[100%] border-1', className)}
+      ></div>
+    )
+  }
+)
+Map.displayName = 'Map'
+export default Map

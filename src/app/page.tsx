@@ -35,6 +35,7 @@ function safariHacks() {
 }
 const Page = () => {
   const [data, setData] = useState<any[]>([])
+  const dataForMap = useMemo(() => data, [data])
   const [currentData, setCurrentData] = useState<Location | null>(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -138,7 +139,7 @@ const Page = () => {
               isVisible={infoCardVisible}
               onClose={() => setInfoCardVisible(false)}
               data={currentData}
-              className="absolute  bottom-0 z-50 h-[30vh] max-w-[430px]"
+              className="z-50 h-[30vh]"
             ></InfoCard>
           </div>
         ) : (
