@@ -21,6 +21,7 @@ import MailIcon from '@mui/icons-material/Mail'
 import BottomNav from './components/bottomNav'
 import LocalList from './components/localList'
 import { Data as Location } from '@/app/service/api/searchShowAction'
+import VConsole from 'vconsole'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
@@ -35,7 +36,6 @@ function safariHacks() {
 }
 const Page = () => {
   const [data, setData] = useState<any[]>([])
-  const dataForMap = useMemo(() => data, [data])
   const [currentData, setCurrentData] = useState<Location | null>(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -46,6 +46,7 @@ const Page = () => {
     handleScrollToTop()
   }, [currentData])
   useEffect(() => {
+    new VConsole({ theme: 'dark' })
     safariHacks()
     searchShoAction()
       .then((data) => setData(data as any))
