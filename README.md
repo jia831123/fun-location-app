@@ -2,6 +2,8 @@
 
 This is a fun location app built with Next.js and Tailwind CSS.
 
+[Demo](https://fun-location-app.vercel.app/)
+
 ## Features
 
 - fun location app
