@@ -4,8 +4,24 @@ const searchShowAction = async function (
   const host =
     'https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ'
   return fetch(`${host}&category=${category}`)
-    .then((response) => response.json())
-    .catch((error) => console.error('Error fetching data:', error))
+    .then((response) => response.json() as Promise<Response>)
+    .then((res) => {
+      const r = res.filter((item) => {
+        return (
+          item.showInfo[0] &&
+          item.showInfo[0].latitude !== null &&
+          item.showInfo[0].longitude !== null &&
+          item.showInfo[0].latitude !== '0' &&
+          item.showInfo[0].longitude !== '0'
+        )
+      })
+      debugger
+      return r
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error)
+      return []
+    })
 }
 
 export enum CategoryEnum {
