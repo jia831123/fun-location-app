@@ -21,7 +21,7 @@ import MailIcon from '@mui/icons-material/Mail'
 import BottomNav from './components/bottomNav'
 import LocalList from './components/localList'
 import { Data as Location } from '@/app/service/api/searchShowAction'
-import VConsole from 'vconsole'
+import vconsole from '@/app/utils/vconsole'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
@@ -46,7 +46,10 @@ const Page = () => {
     handleScrollToTop()
   }, [currentData])
   useEffect(() => {
-    new VConsole({ theme: 'dark' })
+    // vConsole 只在瀏覽器環境下運行
+    if (typeof window !== 'undefined') {
+      vconsole() // 初始化 vConsole
+    }
     safariHacks()
     searchShoAction()
       .then((data) => setData(data as any))
