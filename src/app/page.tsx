@@ -124,6 +124,7 @@ const Page = () => {
         {activeIndex === 0 ? (
           <div className="h-full">
             <MapComponent
+              currentData={currentData}
               setCurrentData={(data) => {
                 setCurrentData(data)
               }}

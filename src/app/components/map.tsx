@@ -1,7 +1,7 @@
 import * as L from 'leaflet'
 import 'leaflet.markercluster'
-import { useEffect, useState, memo } from 'react'
-import { CategoryEnum, Response } from '../service/api/searchShowAction'
+import { useEffect, useState, memo, useRef } from 'react'
+import { CategoryEnum, Data, Response } from '../service/api/searchShowAction'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -16,35 +16,13 @@ function getCustomIcon(type: CategoryEnum) {
     iconSize: [42, 42],
   })
 }
-function getMarkers(locations: Response, setCurrentData: Function, map: any) {
-  const markers = L.markerClusterGroup()
-  locations
-    .filter(
-      (item) =>
-        item.showInfo[0] &&
-        'latitude' in item.showInfo[0] &&
-        'longitude' in item.showInfo[0]
-    )
-    .map((item) => {
-      return L.marker(
-        [
-          Number(item.showInfo[0].latitude) as number,
-          Number(item.showInfo[0].longitude) as number,
-        ],
-        {
-          icon: getCustomIcon(item.category as CategoryEnum),
-        }
-      ).addEventListener('click', () => {
-        setCurrentData(item)
-        map.setView([
-          Number(item.showInfo[0].latitude) as number,
-          Number(item.showInfo[0].longitude) as number,
-        ])
-      })
-    })
-    .forEach((item) => markers.addLayer(item))
-  return markers
+function getCustomClickIcon(type: CategoryEnum) {
+  return L.icon({
+    iconUrl: getIconsPath(type).replace('.png', '') + '_click.png',
+    iconSize: [42, 42],
+  })
 }
+
 function getLocation(): Promise<{ latitude: number; longitude: number }> {
   return new Promise((resolve, rej) => {
     if (navigator.geolocation) {
@@ -86,21 +64,29 @@ const Map = memo(
   ({
     locations = [],
     className = '',
+    currentData,
     setCurrentData = (data) => {},
     initCenter,
   }: {
     locations: Response
     className?: string
+    currentData: Data | null
     setCurrentData: (data: any) => void
     initCenter?: [number, number]
   }) => {
     let isInit = false
     const [map, setMap] = useState<L.Map | null>(null)
+    const [currentMarker, setCurrentMarker] = useState<InstanceType<
+      typeof L.Marker
+    > | null>(null)
+    const currentMarkerRef = useRef(currentMarker)
+    currentMarkerRef.current = currentMarker
+    const currentDataRef = useRef(currentData)
+    currentDataRef.current = currentData
     useEffect(() => {
       console.log('init map')
-      let lMap
       if (isInit === false) {
-        lMap = initMap(initCenter).then((map) => {
+        initMap(initCenter).then((map) => {
           setMap(map as any)
           if (locations.length > 0) {
             const markers = getMarkers(locations, setCurrentData, map)
@@ -121,6 +107,46 @@ const Map = memo(
       const markers = getMarkers(locations, setCurrentData, map)
       map.addLayer(markers)
     }, [locations])
+
+    const getMarkers = (
+      locations: Response,
+      setCurrentData: Function,
+      map: any
+    ) => {
+      const markers = L.markerClusterGroup({ maxClusterRadius: 40 })
+      locations.forEach((item) => {
+        const marker = L.marker(
+          [
+            Number(item.showInfo[0].latitude) as number,
+            Number(item.showInfo[0].longitude) as number,
+          ],
+          {
+            icon: getCustomIcon(item.category as CategoryEnum),
+          }
+        )
+        markers.addLayer(marker)
+        marker.on('click', function () {
+          if (
+            currentMarkerRef.current !== null &&
+            currentDataRef.current !== null
+          ) {
+            currentMarkerRef.current.setIcon(
+              getCustomIcon(currentDataRef.current.category as CategoryEnum)
+            )
+          }
+          // 設置當前被點擊的 Marker 圖標
+          marker.setIcon(getCustomClickIcon(item.category as CategoryEnum))
+          // 更新 currentMarker
+          setCurrentMarker(marker)
+          setCurrentData(item)
+          map.setView([
+            Number(item.showInfo[0].latitude) as number,
+            Number(item.showInfo[0].longitude) as number,
+          ])
+        })
+      })
+      return markers
+    }
     return (
       <div
         id="map"

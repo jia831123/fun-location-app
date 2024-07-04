@@ -15,7 +15,6 @@ const searchShowAction = async function (
           item.showInfo[0].longitude !== '0'
         )
       })
-      debugger
       return r
     })
     .catch((error) => {
