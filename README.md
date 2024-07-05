@@ -7,6 +7,7 @@ This is a fun location app built with Next.js and Tailwind CSS.
 ## Features
 
 - fun location app
+- PWA
 
 ## Installation
 
