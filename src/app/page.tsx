@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import SearchBar from './components/searchBar'
-import searchShoAction from './service/api/searchShowAction'
+import searchShoAction, { CategoryEnum } from './service/api/searchShowAction'
 import InfoCard from './components/infoCard'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
@@ -20,6 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox'
 import MailIcon from '@mui/icons-material/Mail'
 import BottomNav from './components/bottomNav'
 import LocalList from './components/localList'
+import LocationTypeDialog from './components/locationTypeDialog'
 import { Data as Location } from '@/app/service/api/searchShowAction'
 import vconsole from '@/app/utils/vconsole'
 const MapComponent = dynamic(() => import('./components/map'), {
@@ -35,11 +36,26 @@ function safariHacks() {
   })
 }
 const Page = () => {
-  const [data, setData] = useState<any[]>([])
+  const [res, setRes] = useState<Location[]>([])
+  const [activeTypes, setActiveTypes] = useState<CategoryEnum[]>(
+    Object.values(CategoryEnum).filter((e) => typeof e === 'number') as any
+  )
+  const data = useMemo<Location[]>(
+    () =>
+      res.filter((r) => {
+        console.log({
+          activeTypes,
+          r: r.category,
+        })
+        return activeTypes.includes(Number(r.category))
+      }),
+    [res, activeTypes]
+  )
   const [currentData, setCurrentData] = useState<Location | null>(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [searchWord, setSearchWord] = useState<string>('')
+  const [dialogVisible, setDialogVisible] = useState(false)
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -52,7 +68,7 @@ const Page = () => {
     }
     safariHacks()
     searchShoAction()
-      .then((data) => setData(data as any))
+      .then((data) => setRes(data as any))
       .catch((error) => console.error('Error fetching data:', error))
   }, [])
   const childRef = useRef<any>(null)
@@ -120,6 +136,7 @@ const Page = () => {
           setSearchWord={setSearchWord}
           openDraw={toggleDrawer(true)}
           searchClickHandle={() => setActiveIndex(1)}
+          openLegend={() => setDialogVisible(true)}
         ></SearchBar>
         {activeIndex === 0 ? (
           <div className="h-full">
@@ -163,6 +180,12 @@ const Page = () => {
         <Drawer open={open} onClose={toggleDrawer(false)}>
           {DrawerList}
         </Drawer>
+        <LocationTypeDialog
+          actives={activeTypes}
+          updateActives={setActiveTypes}
+          open={dialogVisible}
+          onClose={() => setDialogVisible(false)}
+        />
       </div>
     </main>
   )

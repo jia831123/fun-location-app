@@ -11,27 +11,25 @@ export default function BottomNav({
   active: number
   setActive: Function
 }) {
+  const isInStandaloneMode = () => {
+    if (typeof window !== 'undefined') {
+      return (window.navigator as any).standalone === true
+    }
+    return false
+  }
   return (
     <div className="bg-white">
       <BottomNavigation
-        className="mb-10"
+        className={`${isInStandaloneMode() && 'mb-10'}`}
         showLabels
         value={active}
         onChange={(event, newValue) => {
           setActive(newValue)
         }}
       >
-        <BottomNavigationAction value={0} label="Map" icon={<MapIcon />} />
-        <BottomNavigationAction
-          value={1}
-          label="Favorites"
-          icon={<FormatListNumberedIcon />}
-        />
-        <BottomNavigationAction
-          value={2}
-          label="Nearby"
-          icon={<LocationOnIcon />}
-        />
+        <BottomNavigationAction value={0} icon={<MapIcon />} />
+        <BottomNavigationAction value={1} icon={<FormatListNumberedIcon />} />
+        <BottomNavigationAction value={2} icon={<LocationOnIcon />} />
       </BottomNavigation>
     </div>
   )

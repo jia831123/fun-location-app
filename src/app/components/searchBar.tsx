@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -56,11 +57,13 @@ export default function SearchAppBar({
   searchWord,
   setSearchWord,
   searchClickHandle,
+  openLegend,
 }: {
   openDraw: Function
   searchWord: string
   setSearchWord: Function
   searchClickHandle: Function
+  openLegend: Function
 }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -78,15 +81,7 @@ export default function SearchAppBar({
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            Fun Location App
-          </Typography>
-          <Search>
+          <Search className="mr-3">
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -94,10 +89,22 @@ export default function SearchAppBar({
               value={searchWord}
               onChange={(e) => setSearchWord(e.target.value)}
               onClick={(e) => searchClickHandle(e)}
-              placeholder="Search…"
+              placeholder="想去哪"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+
+          <IconButton
+            onClick={() => {
+              openLegend()
+            }}
+            size="large"
+            edge="end"
+            color="inherit"
+            aria-label="open drawer"
+          >
+            <PlaylistAddCheckIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </Box>

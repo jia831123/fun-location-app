@@ -4,9 +4,11 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
-import clsx from 'clsx' // 用於條件合併 class 名稱
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { Data } from '../service/api/searchShowAction'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { CardHeader, CardMedia, IconButton } from '@mui/material'
+import { Diversity1 } from '@mui/icons-material'
 
 const InfoCard = forwardRef(
   (
@@ -42,16 +44,27 @@ const InfoCard = forwardRef(
         sx={{ minWidth: 275 }}
       >
         <CardContent>
+          <div className="p-0 flex justify-end">
+            <IconButton onClick={onClose} aria-label="settings">
+              <HighlightOffIcon />
+            </IconButton>
+          </div>
           <Typography variant="h5" component="div" gutterBottom>
             {data?.title}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <span
-              dangerouslySetInnerHTML={{
-                __html: String(data?.descriptionFilterHtml || ''),
-              }}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: String(data?.descriptionFilterHtml || ''),
+            }}
+          />
+          {data?.imageUrl && (
+            <CardMedia
+              component="img"
+              height="194"
+              image={data?.imageUrl}
+              alt="Paella dish"
             />
-          </Typography>
+          )}
           <Typography variant="body2">
             <strong>起始日</strong>
             <br />
