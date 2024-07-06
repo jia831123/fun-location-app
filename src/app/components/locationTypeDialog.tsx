@@ -44,9 +44,10 @@ export default function LocationTypeDialog(props: SimpleDialogProps) {
               <ListItemText primary={item}></ListItemText>
               <Switch
                 defaultChecked
-                checked={actives.includes(item)}
+                checked={actives.includes(
+                  CategoryEnum[item as any] as CategoryEnum
+                )}
                 onChange={(event) => {
-                  console.log(event.target.checked)
                   return event.target.checked
                     ? updateActives([...actives, CategoryEnum[item as any]])
                     : updateActives([

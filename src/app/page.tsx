@@ -35,18 +35,27 @@ function safariHacks() {
     mainContainer.style.setProperty('--vh', windowsVH + 'px')
   })
 }
+function getDefaultActiveTypes() {
+  if (typeof window === 'undefined')
+    return [
+      ...(Object.values(CategoryEnum).filter(
+        (e) => typeof e === 'number'
+      ) as any),
+    ]
+  return JSON.parse(localStorage.getItem('activeTypes') as string) || []
+}
 const Page = () => {
   const [res, setRes] = useState<Location[]>([])
   const [activeTypes, setActiveTypes] = useState<CategoryEnum[]>(
-    Object.values(CategoryEnum).filter((e) => typeof e === 'number') as any
+    getDefaultActiveTypes()
   )
+  useEffect(() => {
+    // 每當 activeTypes 改變時，將其保存到 localStorage
+    localStorage.setItem('activeTypes', JSON.stringify(activeTypes))
+  }, [activeTypes])
   const data = useMemo<Location[]>(
     () =>
       res.filter((r) => {
-        console.log({
-          activeTypes,
-          r: r.category,
-        })
         return activeTypes.includes(Number(r.category))
       }),
     [res, activeTypes]
