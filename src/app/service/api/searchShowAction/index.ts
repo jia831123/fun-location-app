@@ -41,21 +41,22 @@ export enum CategoryEnum {
   ALL = 'all',
 }
 
-export const CategoryMap = {
+export const CategoryMap: Record<CategoryEnum, string> = {
   [CategoryEnum.MUSIC]: '音樂',
-  [CategoryEnum.DRAMATIC]: '音樂',
-  [CategoryEnum.DANCE]: '音樂',
-  [CategoryEnum.PARENTING]: '音樂',
-  [CategoryEnum.INDEPENDENT_MUSIC]: '音樂',
-  [CategoryEnum.EXHIBITION]: '音樂',
-  [CategoryEnum.TALK]: '音樂',
-  [CategoryEnum.MOVIE]: '音樂',
-  [CategoryEnum.CULTURE]: '音樂',
-  [CategoryEnum.CAMP]: '音樂',
-  [CategoryEnum.ELECTION]: '音樂',
-  [CategoryEnum.OTHER]: '音樂',
-  [CategoryEnum.CONCERT]: '音樂',
-  [CategoryEnum.RESEARCH_CLASS]: '音樂',
+  [CategoryEnum.DRAMATIC]: '戲劇',
+  [CategoryEnum.DANCE]: '舞蹈',
+  [CategoryEnum.PARENTING]: '親子',
+  [CategoryEnum.INDEPENDENT_MUSIC]: '獨立 音樂',
+  [CategoryEnum.EXHIBITION]: '展覽',
+  [CategoryEnum.TALK]: '講座',
+  [CategoryEnum.MOVIE]: '電影',
+  [CategoryEnum.CULTURE]: '綜藝',
+  [CategoryEnum.CAMP]: '競賽',
+  [CategoryEnum.ELECTION]: '徵選',
+  [CategoryEnum.OTHER]: '其他',
+  [CategoryEnum.CONCERT]: '演唱會',
+  [CategoryEnum.RESEARCH_CLASS]: '研習課程',
+  [CategoryEnum.ALL]: '全部',
 }
 
 interface Request {

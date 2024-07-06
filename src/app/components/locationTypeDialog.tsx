@@ -3,7 +3,6 @@ import Avatar from '@mui/material/Avatar'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
-import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import Dialog from '@mui/material/Dialog'
 import { blue } from '@mui/material/colors'
@@ -28,8 +27,10 @@ export default function LocationTypeDialog(props: SimpleDialogProps) {
   return (
     <Dialog onClose={onClose} open={open}>
       <List sx={{ pt: 0, mx: 2 }}>
-        {(Object.values(CategoryEnum) as any[])
-          .filter((e) => e !== 'all' && Number.isNaN(Number(e)))
+        {(Object.values(CategoryEnum) as CategoryEnum[])
+          .filter((e) => {
+            return String(e).toUpperCase() !== 'ALL' && Number.isNaN(Number(e))
+          })
           .map((item) => (
             <ListItem disableGutters key={item}>
               <ListItemAvatar>
@@ -41,7 +42,10 @@ export default function LocationTypeDialog(props: SimpleDialogProps) {
                   />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={item}></ListItemText>
+
+              <ListItemText
+                primary={CategoryMap[CategoryEnum[item as any] as CategoryEnum]}
+              ></ListItemText>
               <Switch
                 defaultChecked
                 checked={actives.includes(
