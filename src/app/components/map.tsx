@@ -95,6 +95,7 @@ const Map = memo(
     const [currentMarker, setCurrentMarker] = useState<InstanceType<
       typeof L.Marker
     > | null>(null)
+    const [layers, setLayers] = useState<L.Layer[]>([])
     const currentMarkerRef = useRef(currentMarker)
     currentMarkerRef.current = currentMarker
     const currentDataRef = useRef(currentData)
@@ -120,7 +121,11 @@ const Map = memo(
     }, [])
     useEffect(() => {
       if (!map) return
+      if (layers.length > 0) {
+        layers.forEach((layer) => map.removeLayer(layer))
+      }
       const markers = getMarkers(locations, setCurrentData, map)
+      setLayers([...layers, markers])
       map.addLayer(markers)
     }, [locations])
 
