@@ -13,7 +13,7 @@ export default function BottomNav({
 }) {
   const isInStandaloneMode = () => {
     if (typeof window !== 'undefined') {
-      return (window.navigator as any).standalone === true
+      return !document.referrer
     }
     return false
   }
