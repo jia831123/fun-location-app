@@ -12,7 +12,9 @@ const searchShowAction = async function (
           item.showInfo[0].latitude !== null &&
           item.showInfo[0].longitude !== null &&
           item.showInfo[0].latitude !== '0' &&
-          item.showInfo[0].longitude !== '0'
+          item.showInfo[0].longitude !== '0' &&
+          new Date() < new Date(item.endDate) &&
+          new Date() > new Date(item.startDate)
         )
       })
       return r
