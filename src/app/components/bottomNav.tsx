@@ -20,7 +20,7 @@ export default function BottomNav({
   return (
     <div className="bg-white">
       <BottomNavigation
-        className={`${isInStandaloneMode() && 'mb-10'}`}
+        className={`mb-5`}
         showLabels
         value={active}
         onChange={(event, newValue) => {

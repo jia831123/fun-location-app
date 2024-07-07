@@ -142,23 +142,23 @@ const Map = memo(
         )
         markers.addLayer(marker)
         marker.on('click', function () {
-          // if (
-          //   currentMarkerRef.current !== null &&
-          //   currentDataRef.current !== null
-          // ) {
-          //   currentMarkerRef.current.setIcon(
-          //     getCustomIcon(currentDataRef.current.category as CategoryEnum)
-          //   )
-          // }
-          // // 設置當前被點擊的 Marker 圖標
-          // marker.setIcon(getCustomClickIcon(item.category as CategoryEnum))
-          // // 更新 currentMarker
-          // setCurrentMarker(marker)
-          // setCurrentData(item)
-          // map.setView([
-          //   Number(item.showInfo[0].latitude) as number,
-          //   Number(item.showInfo[0].longitude) as number,
-          // ])
+          if (
+            currentMarkerRef.current !== null &&
+            currentDataRef.current !== null
+          ) {
+            currentMarkerRef.current.setIcon(
+              getCustomIcon(currentDataRef.current.category as CategoryEnum)
+            )
+          }
+          // 設置當前被點擊的 Marker 圖標
+          marker.setIcon(getCustomClickIcon(item.category as CategoryEnum))
+          // 更新 currentMarker
+          setCurrentMarker(marker)
+          setCurrentData(item)
+          map.setView([
+            Number(item.showInfo[0].latitude) as number,
+            Number(item.showInfo[0].longitude) as number,
+          ])
         })
       })
       return markers
