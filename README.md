@@ -2,11 +2,13 @@
 
 This is a fun location app built with Next.js and Tailwind CSS.
 
+Base on API - [文化部 藝文活動介接資料](https://opendata.culture.tw/frontsite/openData/detail?datasetId=266)
+
 [Demo](https://fun-location-app.vercel.app/)
 
 ## Features
 
-- fun location app
+- Fun location app
 - PWA
 
 ## Installation
