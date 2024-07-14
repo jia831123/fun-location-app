@@ -39,3 +39,19 @@ body {
   height: 100vh; /*給 Safari 以外的瀏覽器讀取*/
   height: calc(var(--vh, 1vh) * 100);
 }
+.MuiDrawer-paper{
+  max-width:430px
+}
+@media (max-width: 430px) {
+  .MuiDrawer-paper { 
+      margin-left: 0px;
+  }
+
+}
+/* 當螢幕寬度大於 600px 時，應用這些樣式 */
+@media (min-width: 431px) {
+.MuiDrawer-paper {
+    margin-left: calc((100vw - 430px) / 2);
+    /* transform:translateX(calc((100vw - 430px) / 2)) !important; */
+  }
+}

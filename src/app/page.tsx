@@ -109,7 +109,7 @@ const Page = () => {
     setOpen(newOpen)
   }
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {['關於'].map((text, index) => (
           <ListItem key={text} disablePadding>
@@ -126,7 +126,7 @@ const Page = () => {
   )
   return (
     <main className="flex main-container flex-col items-center justify-center bg-black">
-      <div className="container flex flex-col h-full w-full max-w-[430px]">
+      <div className="container flex  flex-col h-full w-full max-w-[430px]">
         <SearchBar
           searchWord={searchWord}
           setSearchWord={setSearchWord}
@@ -173,7 +173,7 @@ const Page = () => {
 
         <BottomNav active={activeIndex} setActive={setActiveIndex}></BottomNav>
 
-        <Drawer open={open} onClose={toggleDrawer(false)}>
+        <Drawer anchor={'top'} open={open} onClose={toggleDrawer(false)}>
           {DrawerList}
         </Drawer>
         <LocationTypeDialog

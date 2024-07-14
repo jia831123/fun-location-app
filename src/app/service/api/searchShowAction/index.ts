@@ -1,8 +1,9 @@
+const URL =
+  'https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ'
 const searchShowAction = async function (
   category: CategoryEnum = CategoryEnum.ALL
 ): Promise<Response> {
-  const host =
-    'https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ'
+  const host = URL
   return fetch(`${host}&category=${category}`)
     .then((response) => response.json() as Promise<Response>)
     .then((res) => {

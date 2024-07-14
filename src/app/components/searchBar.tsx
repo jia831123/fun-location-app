@@ -68,7 +68,7 @@ export default function SearchAppBar({
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar color={'primary'} position="static">
-        <Toolbar>
+        <Toolbar className="justify-between">
           <IconButton
             onClick={() => {
               openDraw()
@@ -93,7 +93,6 @@ export default function SearchAppBar({
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-
           <IconButton
             onClick={() => {
               openLegend()
