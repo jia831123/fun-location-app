@@ -13,14 +13,14 @@ export default function BottomNav({
 }) {
   const isInStandaloneMode = () => {
     if (typeof window !== 'undefined') {
-      return !document.referrer
+      return window.matchMedia('(display-mode: standalone)').matches
     }
     return false
   }
   return (
     <div className="bg-white">
       <BottomNavigation
-        className={`mb-5`}
+        className={isInStandaloneMode() ? `mb-5`:''}
         showLabels
         value={active}
         onChange={(event, newValue) => {

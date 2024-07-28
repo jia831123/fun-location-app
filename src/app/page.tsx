@@ -42,7 +42,7 @@ function getDefaultActiveTypes() {
         (e) => typeof e === 'number'
       ) as any),
     ]
-  return JSON.parse(localStorage.getItem('activeTypes') as string) || []
+  return localStorage.getItem('activeTypes')?JSON.parse(localStorage.getItem('activeTypes') as string) : [...Object.values(CategoryEnum).filter(v=>typeof v ==='number')]
 }
 const Page = () => {
   const [res, setRes] = useState<Location[]>([])
