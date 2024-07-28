@@ -89,7 +89,7 @@ export default function SearchAppBar({
               value={searchWord}
               onChange={(e) => setSearchWord(e.target.value)}
               onClick={(e) => searchClickHandle(e)}
-              placeholder="想去哪"
+              placeholder="What next ?"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>

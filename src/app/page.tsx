@@ -23,6 +23,7 @@ import LocalList from './components/localList'
 import LocationTypeDialog from './components/locationTypeDialog'
 import { Data as Location } from '@/app/service/api/searchShowAction'
 import vconsole from '@/app/utils/vconsole'
+import AboutDialog from './components/aboutDialog'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
@@ -65,6 +66,7 @@ const Page = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [searchWord, setSearchWord] = useState<string>('')
   const [dialogVisible, setDialogVisible] = useState(false)
+  const [aboutDialogVisable, setAboutDialogVisible] = useState(false)
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -73,7 +75,7 @@ const Page = () => {
   useEffect(() => {
     // vConsole 只在瀏覽器環境下運行
     if (typeof window !== 'undefined') {
-      vconsole() // 初始化 vConsole
+      //vconsole() // 初始化 vConsole
     }
     safariHacks()
     searchShoAction()
@@ -112,9 +114,9 @@ const Page = () => {
     <Box role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {['關於'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key={text} disablePadding onClick={e=>setAboutDialogVisible(true)}>
             <ListItemButton>
-              <ListItemIcon>
+              <ListItemIcon >
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
@@ -176,6 +178,7 @@ const Page = () => {
         <Drawer anchor={'top'} open={open} onClose={toggleDrawer(false)}>
           {DrawerList}
         </Drawer>
+        <AboutDialog open={aboutDialogVisable} setOpen={setAboutDialogVisible}></AboutDialog>
         <LocationTypeDialog
           actives={activeTypes}
           updateActives={setActiveTypes}
