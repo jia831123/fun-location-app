@@ -24,6 +24,7 @@ import LocationTypeDialog from './components/locationTypeDialog'
 import { Data as Location } from '@/app/service/api/searchShowAction'
 import vconsole from '@/app/utils/vconsole'
 import AboutDialog from './components/aboutDialog'
+import BackDrop from './components/backDrop'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
@@ -67,6 +68,10 @@ const Page = () => {
   const [searchWord, setSearchWord] = useState<string>('')
   const [dialogVisible, setDialogVisible] = useState(false)
   const [aboutDialogVisable, setAboutDialogVisible] = useState(false)
+  const [isBackDrop,setBackDrop]=useState(true)
+
+  const showLoading = ()=>setBackDrop(true)
+  const hideLoading = ()=>setBackDrop(false)
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -78,9 +83,11 @@ const Page = () => {
       //vconsole() // 初始化 vConsole
     }
     safariHacks()
+    showLoading()
     searchShoAction()
       .then((data) => setRes(data as any))
       .catch((error) => console.error('Error fetching data:', error))
+      .finally(()=>hideLoading())
   }, [])
   const childRef = useRef<any>(null)
 
@@ -186,6 +193,7 @@ const Page = () => {
           onClose={() => setDialogVisible(false)}
         />
       </div>
+      <BackDrop open={isBackDrop}  />
     </main>
   )
 }
