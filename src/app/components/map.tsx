@@ -50,8 +50,9 @@ function getLocation(): Promise<{ latitude: number; longitude: number }> {
   })
 }
 
-async function initMap(center?: [latitude: number, longitude: number]) {
+async function initMap(hideLoading:Function,showLoading:Function,center?: [latitude: number, longitude: number]) {
   console.log('prepare init map')
+  showLoading()
   const location = await getLocation().catch((e) => ({
     latitude: 25.03746,
     longitude: 121.564558,
@@ -74,6 +75,7 @@ async function initMap(center?: [latitude: number, longitude: number]) {
   // Handle location found event
   lMap.on('locationfound', function (e) {})
   console.log('map init success')
+  hideLoading()
   return lMap
 }
 const Map = memo(
@@ -83,13 +85,18 @@ const Map = memo(
     currentData,
     setCurrentData = (data) => {},
     initCenter,
+    hideLoading,
+    showLoading
   }: {
     locations: Response
     className?: string
     currentData: Data | null
     setCurrentData: (data: any) => void
     initCenter?: [number, number]
+    hideLoading:Function
+    showLoading:Function
   }) => {
+    console.log('map render')
     let isInit = false
     const [map, setMap] = useState<L.Map | null>(null)
     const [currentMarker, setCurrentMarker] = useState<InstanceType<
@@ -103,7 +110,7 @@ const Map = memo(
     useEffect(() => {
       if (isInit === false) {
         console.log('init map')
-        initMap(initCenter).then((map) => {
+        initMap(hideLoading,showLoading,initCenter).then((map) => {
           setMap(map as any)
           if (locations.length > 0) {
             const markers = getMarkers(locations, setCurrentData, map)

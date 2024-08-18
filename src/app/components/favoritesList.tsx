@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ShareLocationOutlinedIcon from '@mui/icons-material/ShareLocationOutlined';
 import clsx from 'clsx' // 用於條件合併 class 名稱
+import * as React from 'react';
 import { memo } from 'react'
 
 
@@ -27,7 +28,7 @@ const LocalList = memo(
     favorites:string[]
     setFavorites:(favorites:string[])=>undefined
   }) => {
-    function handleIconClick(event: MouseEvent,UID:string){
+    function handleIconClick(event:MouseEvent,UID:string){
       event.stopPropagation(); // 阻止事件冒泡
       favorites.includes(UID)?setFavorites(favorites.filter(e=>e!==UID)):setFavorites([UID,...favorites])
       console.log([UID,...favorites]);
@@ -44,7 +45,7 @@ const LocalList = memo(
       >
         <nav aria-label="secondary mailbox folders">
           <List>
-            {locations.map((location, index) => (
+            {locations.filter(l=>favorites.includes(l.UID)).map((location, index) => (
               <ListItem
                 onClick={(e) => setCurrentData(location)}
                 disablePadding
