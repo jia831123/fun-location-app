@@ -45,7 +45,7 @@ const LocalList = memo(
       >
         <nav aria-label="secondary mailbox folders">
           <List>
-            {locations.length === 0 ? (
+            {locations.filter((l) => favorites.includes(l.UID)).length ? (
               locations
                 .filter((l) => favorites.includes(l.UID))
                 .map((location, index) => (

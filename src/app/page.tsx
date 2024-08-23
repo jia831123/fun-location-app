@@ -50,9 +50,15 @@ function Page() {
   const [res, setRes] = useState<Location[]>([])
   const data = useMemo<Location[]>(
     () =>
-      res.filter((r) => {
-        return activeTypes.includes(Number(r.category))
-      }),
+      res
+        .filter((resData) => {
+          return activeTypes.includes(Number(resData.category))
+        })
+        .filter(
+          (resData, resIndex, array) =>
+            array.findIndex((arrData) => arrData.UID === resData.UID) ===
+            resIndex
+        ),
     [res, activeTypes]
   )
 
