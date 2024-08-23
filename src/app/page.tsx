@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import SearchBar from './components/searchBar'
-import searchShoAction, { CategoryEnum } from './service/api/searchShowAction'
+import searchShoAction from './service/api/searchShowAction'
 import InfoCard from './components/infoCard'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
@@ -25,44 +25,26 @@ import { Data as Location } from '@/app/service/api/searchShowAction'
 import vconsole from '@/app/utils/vconsole'
 import AboutDialog from './components/aboutDialog'
 import BackDrop from './components/backDrop'
+import { useBackDrop } from './hook/useBackDrop'
+import { useActiveTypes } from './hook/useActiveTypes'
+import { useFavorites } from './hook/useFavorites'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
 
-function getDefaultActiveTypes() {
-  if (typeof window === 'undefined')
-    return [
-      ...(Object.values(CategoryEnum).filter(
-        (e) => typeof e === 'number'
-      ) as any),
-    ]
-  return localStorage.getItem('activeTypes')
-    ? JSON.parse(localStorage.getItem('activeTypes') as string)
-    : [...Object.values(CategoryEnum).filter((v) => typeof v === 'number')]
-}
-
-function getFavorites() {
-  if (typeof window === 'undefined') {
-    return []
-  }
-  return localStorage.getItem('favorites')
-    ? JSON.parse(localStorage.getItem('favorites') as string)
-    : []
-}
 function Page() {
+  const {activeTypes,setActiveTypes}=useActiveTypes()
+  const {favorites, setFavorites}=useFavorites()
+  const [currentData, setCurrentData] = useState<Location | null>(null)
+  const [infoCardVisible, setInfoCardVisible] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [searchWord, setSearchWord] = useState<string>('')
+  const [dialogVisible, setDialogVisible] = useState(false)
+  const [aboutDialogVisable, setAboutDialogVisible] = useState(false)
+  const {isLoading,showLoading,hideLoading}=useBackDrop()
+  const infoCardRef = useRef<{ scrollToTop: () => void }>(null)
+
   const [res, setRes] = useState<Location[]>([])
-  const [activeTypes, setActiveTypes] = useState<CategoryEnum[]>(
-    getDefaultActiveTypes()
-  )
-  const [favorites, setFavorites] = useState<string[]>(getFavorites())
-  useEffect(() => {
-    // 每當 activeTypes 改變時，將其保存到 localStorage
-    localStorage.setItem('activeTypes', JSON.stringify(activeTypes))
-  }, [activeTypes])
-  useEffect(() => {
-    // 每當 activeTypes 改變時，將其保存到 localStorage
-    localStorage.setItem('favorites', JSON.stringify(favorites))
-  }, [favorites])
   const data = useMemo<Location[]>(
     () =>
       res.filter((r) => {
@@ -70,17 +52,7 @@ function Page() {
       }),
     [res, activeTypes]
   )
-  const [currentData, setCurrentData] = useState<Location | null>(null)
-  const [infoCardVisible, setInfoCardVisible] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [searchWord, setSearchWord] = useState<string>('')
-  const [dialogVisible, setDialogVisible] = useState(false)
-  const [aboutDialogVisable, setAboutDialogVisible] = useState(false)
-  const [isBackDrop, setBackDrop] = useState(true)
-  const infoCardRef = useRef<{ scrollToTop: () => void }>(null)
 
-  const showLoading = () => setBackDrop(true)
-  const hideLoading = () => setBackDrop(false)
   useEffect(() => {
     if (!currentData) return
     setInfoCardVisible(true)
@@ -102,7 +74,7 @@ function Page() {
     })()
     showLoading()
     searchShoAction()
-      .then((data) => setRes(data as any))
+      .then((data) => setRes(data))
       .catch((error) => console.error('Error fetching data:', error))
       .finally(() => hideLoading())
   }, [])
@@ -235,7 +207,7 @@ function Page() {
           onClose={() => setDialogVisible(false)}
         />
       </div>
-      <BackDrop open={isBackDrop} />
+      <BackDrop open={isLoading} />
     </main>
   )
 }
