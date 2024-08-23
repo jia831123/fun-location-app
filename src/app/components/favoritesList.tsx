@@ -45,20 +45,34 @@ const LocalList = memo(
       >
         <nav aria-label="secondary mailbox folders">
           <List>
-            {locations.filter(l=>favorites.includes(l.UID)).map((location, index) => (
-              <ListItem
-                onClick={(e) => setCurrentData(location)}
-                disablePadding
-                key={`${location.UID + index}`}
-              >
-                <ListItemButton>
-                  <ListItemText primary={location.title} />
-                  <IconButton onClick={e=>handleIconClick(e,location.UID)}>
-                    {favorites.includes(location.UID)?<ShareLocationOutlinedIcon />:<CircleOutlinedIcon />}
-                  </IconButton>
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {locations.length === 0 ? (
+              locations
+                .filter((l) => favorites.includes(l.UID))
+                .map((location, index) => (
+                  <ListItem
+                    onClick={(e) => setCurrentData(location)}
+                    disablePadding
+                    key={`${location.UID + index}`}
+                  >
+                    <ListItemButton>
+                      <ListItemText primary={location.title} />
+                      <IconButton
+                        onClick={(e) => handleIconClick(e, location.UID)}
+                      >
+                        {favorites.includes(location.UID) ? (
+                          <ShareLocationOutlinedIcon />
+                        ) : (
+                          <CircleOutlinedIcon />
+                        )}
+                      </IconButton>
+                    </ListItemButton>
+                  </ListItem>
+                ))
+            ) : (
+              <div className="p-4 text-center">
+                還沒有加入最愛的地點呦ヾ(´ε`ヾ)
+              </div>
+            )}
           </List>
         </nav>
       </Box>

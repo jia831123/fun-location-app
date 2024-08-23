@@ -7,7 +7,7 @@ import Link from '@mui/material/Link'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { Data } from '../service/api/searchShowAction'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
-import { CardHeader, CardMedia, IconButton } from '@mui/material'
+import { Alert, CardHeader, CardMedia, IconButton } from '@mui/material'
 import { Diversity1 } from '@mui/icons-material'
 
 const InfoCard = forwardRef(
@@ -52,11 +52,16 @@ const InfoCard = forwardRef(
           <Typography variant="h5" component="div" gutterBottom>
             {data?.title}
           </Typography>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: String(data?.descriptionFilterHtml || ''),
-            }}
-          />
+          {data?.descriptionFilterHtml && (
+            <Alert variant="outlined" severity="info">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: String(data?.descriptionFilterHtml || ''),
+                }}
+              />
+            </Alert>
+          )}
+
           {data?.imageUrl && (
             <CardMedia
               component="img"
@@ -66,34 +71,33 @@ const InfoCard = forwardRef(
             />
           )}
           <Typography variant="body2">
-            <strong>起始日</strong>
-            <br />
-            {data?.startDate}
+            <Alert severity="success">起始日:{data?.startDate}</Alert>
           </Typography>
           <Typography variant="body2">
-            <strong>結束日</strong>
-            <br />
-            {data?.endDate}
+            <Alert severity="warning">結束日:{data?.endDate}</Alert>
           </Typography>
           <Typography variant="body2">
-            <strong>展覽地點</strong>
-            <br />
-            {data?.showInfo[0]?.locationName} - {data?.showInfo[0]?.location}
+            <Alert severity="info">
+              展覽地點:{data?.showInfo[0]?.locationName} -{' '}
+              {data?.showInfo[0]?.location}
+            </Alert>
           </Typography>
           <Typography variant="body2">
-            <strong>票價</strong>
-            <br />
-            {data?.showInfo[0]?.price || '暫時無資訊'}
+            <Alert severity="error">
+              票價: {data?.showInfo[0]?.price || '暫時無資訊'}
+            </Alert>
           </Typography>
           <Typography variant="body2">
             {data?.webSales ? (
-              <Link
-                href={data?.webSales}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                更多信息和購票
-              </Link>
+              <Button>
+                <Link
+                  href={data?.webSales}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  更多信息和購票
+                </Link>
+              </Button>
             ) : null}
           </Typography>
         </CardContent>

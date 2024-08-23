@@ -28,21 +28,24 @@ import BackDrop from './components/backDrop'
 import { useBackDrop } from './hook/useBackDrop'
 import { useActiveTypes } from './hook/useActiveTypes'
 import { useFavorites } from './hook/useFavorites'
+import { useSafarHack } from './hook/useSafariHacks'
 const MapComponent = dynamic(() => import('./components/map'), {
   ssr: false,
 })
 
 function Page() {
-  const {activeTypes,setActiveTypes}=useActiveTypes()
-  const {favorites, setFavorites}=useFavorites()
+  const { activeTypes, setActiveTypes } = useActiveTypes()
+  const { favorites, setFavorites } = useFavorites()
   const [currentData, setCurrentData] = useState<Location | null>(null)
   const [infoCardVisible, setInfoCardVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [searchWord, setSearchWord] = useState<string>('')
   const [dialogVisible, setDialogVisible] = useState(false)
   const [aboutDialogVisable, setAboutDialogVisible] = useState(false)
-  const {isLoading,showLoading,hideLoading}=useBackDrop()
+  const { isLoading, showLoading, hideLoading } = useBackDrop()
   const infoCardRef = useRef<{ scrollToTop: () => void }>(null)
+  const [open, setOpen] = useState(false)
+  useSafarHack()
 
   const [res, setRes] = useState<Location[]>([])
   const data = useMemo<Location[]>(
@@ -59,19 +62,6 @@ function Page() {
     handleScrollToTop()
   }, [currentData])
   useEffect(() => {
-    // vConsole 只在瀏覽器環境下運行
-    if (typeof window !== 'undefined') {
-      //vconsole() // 初始化 vConsole
-    }
-    (function safariHacks() {
-      let windowsVH = window.innerHeight / 100
-      const mainContainer = document.querySelector('.main-container') as HTMLElement
-      if (mainContainer === null) return
-      mainContainer.style.setProperty('--vh', windowsVH + 'px')
-      window.addEventListener('resize', function () {
-        mainContainer.style.setProperty('--vh', windowsVH + 'px')
-      })
-    })()
     showLoading()
     searchShoAction()
       .then((data) => setRes(data))
@@ -100,7 +90,6 @@ function Page() {
       infoCardRef.current.scrollToTop()
     }
   }
-  const [open, setOpen] = useState(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
@@ -163,12 +152,12 @@ function Page() {
               className="z-50 h-[30vh]"
             ></InfoCard>
           </div>
-        ) : activeIndex===1?(
+        ) : activeIndex === 1 ? (
           <LocalList
             className={`z-20 `}
             locations={locationsForList}
             favorites={favorites}
-            setFavorites={(data)=>{
+            setFavorites={(data) => {
               setFavorites(data)
             }}
             setCurrentData={(data) => {
@@ -176,12 +165,12 @@ function Page() {
               setCurrentData(data)
             }}
           ></LocalList>
-        ):(
+        ) : (
           <FavoritesList
             className={`z-20 `}
             locations={locationsForList}
             favorites={favorites}
-            setFavorites={data=>{
+            setFavorites={(data) => {
               setFavorites(data)
             }}
             setCurrentData={(data) => {

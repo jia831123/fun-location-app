@@ -44,20 +44,32 @@ const LocalList = memo(
       >
         <nav aria-label="secondary mailbox folders">
           <List>
-            {locations.map((location, index) => (
-              <ListItem
-                onClick={(e) => setCurrentData(location)}
-                disablePadding
-                key={`${location.UID + index}`}
-              >
-                <ListItemButton>
-                  <ListItemText primary={location.title} />
-                  <IconButton onClick={e=>handleIconClick(e,location.UID)}>
-                    {favorites.includes(location.UID)?<ShareLocationOutlinedIcon />:<CircleOutlinedIcon />}
-                  </IconButton>
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {locations.length ? (
+              locations.map((location, index) => (
+                <ListItem
+                  onClick={(e) => setCurrentData(location)}
+                  disablePadding
+                  key={`${location.UID + index}`}
+                >
+                  <ListItemButton>
+                    <ListItemText primary={location.title} />
+                    <IconButton
+                      onClick={(e) => handleIconClick(e, location.UID)}
+                    >
+                      {favorites.includes(location.UID) ? (
+                        <ShareLocationOutlinedIcon />
+                      ) : (
+                        <CircleOutlinedIcon />
+                      )}
+                    </IconButton>
+                  </ListItemButton>
+                </ListItem>
+              ))
+            ) : (
+              <div className="p-4 text-center">
+                暫時沒有資料，晚點再來 崩╰(〒皿〒)╯潰
+              </div>
+            )}
           </List>
         </nav>
       </Box>
